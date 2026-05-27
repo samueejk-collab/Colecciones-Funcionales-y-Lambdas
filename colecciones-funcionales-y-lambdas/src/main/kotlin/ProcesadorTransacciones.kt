@@ -56,7 +56,8 @@ class ProcesadorTransacciones {
         transacciones: List<Transaccion>,
         criterios: List<(Transaccion) -> Boolean>,
     ): List<Transaccion> {
-        TODO("Implementar: Debe filtrar transacciones que cumplan TODOS los criterios")
+        return transacciones.filter{ transaccion ->
+            criterios.all{criterio -> criterio(transaccion)} }
     }
 
     // Parte C: Funciones de Agregación como Parámetros
@@ -102,10 +103,8 @@ class ProcesadorTransacciones {
         onTransaccionRechazada: (Transaccion) -> Unit,
     ) {
         transacciones.forEach { tx ->
-            if (tx.estado == EstadoTransaccion.PROCESADA) {
-                onTransaccionProcesada(tx)
-            } else if (tx.estado == EstadoTransaccion.RECHAZADA) {
-                onTransaccionRechazada(tx)
+            if (tx.estado == EstadoTransaccion.PROCESADA) { onTransaccionProcesada(tx)
+            } else if (tx.estado == EstadoTransaccion.RECHAZADA) { onTransaccionRechazada(tx)
             }
         }
     }
