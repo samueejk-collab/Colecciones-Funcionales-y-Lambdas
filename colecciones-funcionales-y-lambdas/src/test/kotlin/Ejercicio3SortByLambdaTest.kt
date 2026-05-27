@@ -237,7 +237,7 @@ class Ejercicio3SortByLambdaTest {
                 Empleado(4, "David", "IT", 55000.0, 4, 3.9, 12)
             )
             
-            // Aplicar filtro y luego ordenamiento, todo con lambdas
+            // Aplicar filtro y luego ordenamiento
             val empleadosTop = sistema.obtenerTopEmpleados(
                 empleados,
                 filtro = { it.evaluacionDesempeno >= 4.0 },

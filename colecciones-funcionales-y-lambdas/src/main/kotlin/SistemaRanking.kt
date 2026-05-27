@@ -21,49 +21,62 @@ class SistemaRanking {
     // Parte A: Ordenamiento Simple con sortBy
     
     fun ordenarPorSalario(empleados: List<Empleado>): List<Empleado> {
-        TODO("Implementar: Debe ordenar empleados por salario de menor a mayor")
+       return empleados.sortedBy{ it.salario }
+
     }
     
     fun ordenarPorExperienciaDesc(empleados: List<Empleado>): List<Empleado> {
-        TODO("Implementar: Debe ordenar por años de experiencia de mayor a menor")
+
+       return empleados.sortedByDescending { it.anosExperiencia }
+
     }
     
     fun ordenarPorNombre(empleados: List<Empleado>): List<Empleado> {
-        TODO("Implementar: Debe ordenar alfabéticamente por nombre")
+        return empleados.sortedBy { it.nombre }
+
     }
     
     // Parte B: Lambdas Complejas
     
     fun ordenarPorEficiencia(empleados: List<Empleado>): List<Empleado> {
-        TODO("Implementar: Debe ordenar por eficiencia (proyectosCompletados / añosExperiencia) descendente")
+        return empleados.sortedByDescending { it.proyectosCompletados.toDouble() / it.anosExperiencia }
+
     }
     
     fun ordenarPorPuntuacionCompuesta(empleados: List<Empleado>): List<Empleado> {
-        TODO("Implementar: Debe ordenar por puntuación = (evaluacionDesempeño * 2) + (proyectosCompletados * 0.1) descendente")
+        return empleados.sortedByDescending { it.evaluacionDesempeno * 2 + it.proyectosCompletados.toDouble() * 0.1 }
+
     }
     
     fun ordenarITPrimero(empleados: List<Empleado>): List<Empleado> {
-        TODO("Implementar: Debe ordenar con empleados de IT primero, luego por salario ascendente")
+        return empleados.sortedBy {
+            if (it.departamento == "IT") {
+                it.salario
+            } else {
+                it.salario + 1000000
+            }
+        }
     }
     
     // Parte C: Ordenamiento Múltiple
     
     fun ordenarPorDepartamentoYSalario(empleados: List<Empleado>): List<Empleado> {
-        TODO("""
-            Implementar: Debe ordenar por:
-            1) Departamento alfabéticamente
-            2) Dentro del mismo departamento, por salario descendente
-            3) Si mismo departamento y salario, por experiencia ascendente
-        """)
+        return empleados.sortedWith(
+            compareBy<Empleado> { it.departamento }
+                .thenByDescending { it.salario }
+                .thenBy { it.anosExperiencia }
+        )
     }
     
     fun ordenarSegunSeniority(empleados: List<Empleado>): List<Empleado> {
-        TODO("""
-            Implementar: 
-            - Juniors (experiencia < 5): ordenar por evaluación descendente
-            - Seniors (experiencia >= 5): ordenar por proyectos completados descendente
-            - Mantener juniors antes que seniors en la lista final
-        """)
+        return empleados.sortedWith(
+            compareBy<Empleado> {
+                if (it.anosExperiencia < 5) 0 else 1   // Juniors primero
+            }
+                .thenByDescending {
+                    if (it.anosExperiencia < 5) it.evaluacionDesempeno else it.proyectosCompletados
+                }
+        )
     }
     
     // Parte D: Lambdas como Parámetros de Configuración
@@ -72,7 +85,7 @@ class SistemaRanking {
         empleados: List<Empleado>,
         estrategia: (Empleado) -> T
     ): List<Empleado> {
-        TODO("Implementar: Debe ordenar usando la estrategia proporcionada descendentemente")
+        return empleados.sortedByDescending { estrategia(it) }
     }
     
     fun obtenerTopEmpleados(
@@ -81,11 +94,9 @@ class SistemaRanking {
         ordenamiento: (Empleado) -> Double,
         limite: Int
     ): List<Empleado> {
-        TODO("""
-            Implementar: 
-            1) Filtrar empleados según el predicado
-            2) Ordenar por el criterio dado (descendente)
-            3) Tomar solo los primeros 'limite' empleados
-        """)
+        return empleados
+            .filter { filtro(it) }
+            .sortedByDescending { ordenamiento(it) }
+            .take(limite)
     }
 }

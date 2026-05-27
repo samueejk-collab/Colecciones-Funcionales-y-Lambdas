@@ -80,31 +80,22 @@ class GestorTareas {
         horasMaximo: Int,
     ): Boolean {
         return tareas.all{ it.tiempoEstimadoHoras < horasMaximo}
-        TODO("Implementar: Debe verificar si todas las tareas están dentro del límite de horas")
     }
 
     // Parte D: Combinación de Find, Any y All
 
     fun proyectoListoParaEntrega(tareas: List<Tarea>): Boolean {
-        TODO(
-            """
-            Implementar: Un proyecto está listo si:
-            - Todas las tareas de prioridad alta (3) están completadas
-            - No hay ninguna tarea pendiente con etiqueta "blocker"
-            - Existe al menos una tarea de documentación completada
-        """,
-        )
+        return tareas.all { it.prioridad != 3 || it.completada } &&
+                tareas.find { !it.completada && "blocker" in it.etiquetas } == null &&
+                tareas.any { it.completada && "docs" in it.etiquetas }
     }
 
     fun generarResumenEstado(tareas: List<Tarea>): EstadoProyecto {
-        TODO(
-            """
-            Implementar: Debe generar un resumen con:
-            - hayTareasCriticasPendientes: si hay tareas de prioridad 3 sin completar
-            - totalHorasPendientes: suma de horas de tareas no completadas
-            - todosLosBugsResueltos: si todas las tareas con etiqueta "bug" están completadas
-        """,
+        return EstadoProyecto(
+            tareas.any { it.prioridad == 3 && !it.completada },
+            tareas.find { !it.completada }?.let { tareas.sumOf { if (!it.completada) it.tiempoEstimadoHoras else 0 } } ?: 0,
+            tareas.all { !("bug" in it.etiquetas) || it.completada }
         )
-    }
+        }
 }
 
