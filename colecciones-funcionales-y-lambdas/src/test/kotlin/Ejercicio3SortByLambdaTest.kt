@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Nested
  * Objetivo: Implementar un sistema de ranking que ordene elementos
  * según diferentes criterios usando sortBy y lambdas personalizadas.
  */
-class Ejercicio3SortByLambdaTest {
+class
+Ejercicio3SortByLambdaTest {
     
 
     @Nested

@@ -44,7 +44,10 @@ class SistemaRanking {
     }
     
     fun ordenarPorPuntuacionCompuesta(empleados: List<Empleado>): List<Empleado> {
-        return empleados.sortedByDescending { it.evaluacionDesempeno * 2 + it.proyectosCompletados.toDouble() * 0.1 }
+        return empleados.sortedWith(compareByDescending<Empleado>
+        {(it.evaluacionDesempeno * 2) + (it.proyectosCompletados * 0.1)}
+            .thenByDescending {it.evaluacionDesempeno}
+        )
 
     }
     
